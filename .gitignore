@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────────────────────
 #  DiffGI project page — .gitignore
-#  Only the self-contained `site/` folder is meant to be published.
+#  Only the self-contained `docs/` folder is meant to be published.
 # ─────────────────────────────────────────────────────────────
 
 # Source / working materials (NOT needed for the published page).
@@ -14,7 +14,17 @@ paper/
 *[Rr]ésumé*.pdf
 
 # Backup of the original (pre-edit) teaser — not used by the live site.
-site/static/videos/teaser_original.mp4
+docs/static/videos/teaser_original.mp4
+
+# Demo model weights — host on Hugging Face / CDN, never in the repo
+# (GitHub Pages: 100MB/file, ~1GB repo, fair-use bandwidth).
+# Curated preset input images under docs/demo/presets/ are fine to commit.
+docs/demo/models/
+*.onnx
+*.safetensors
+*.bin
+*.pt
+*.pth
 
 # ── OS / editor cruft ──────────────────────────────────────────
 .DS_Store
