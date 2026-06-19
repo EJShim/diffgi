@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DiffGI: Differentiable Geometry Images for High-Fidelity Thin-Shell 3D Generation</title>
+  <meta name="description" content="DiffGI replaces binary occupancy maps with a continuous 2D TSDF and a Differentiable Marching Squares module for end-to-end, high-fidelity thin-shell 3D generation." />
+  <meta property="og:title" content="DiffGI: Differentiable Geometry Images for High-Fidelity Thin-Shell 3D Generation" />
+  <meta property="og:description" content="A fully differentiable geometry-image framework for thin-shell and non-manifold 3D generation." />
+  <meta property="og:image" content="static/images/teaser_poster.jpg" />
+  <meta property="og:type" content="website" />
+  <style>
+    :root{
+      --ink:#1c1c1e; --muted:#5f6368; --line:#e7e7ea; --bg:#ffffff;
+      --accent:#363636; --pill:#363636; --link:#1f6feb;
+      --max:980px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Noto Sans KR",sans-serif;
+      line-height:1.65; font-size:17px; -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--link); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 22px}
+
+    /* Header */
+    header{padding:56px 0 8px; text-align:center}
+    h1.title{
+      font-size:2.05rem; line-height:1.25; font-weight:700; letter-spacing:-.01em;
+      margin:0 auto 22px; max-width:840px;
+    }
+    .venue{display:inline-block; font-weight:600; color:#b23b3b; margin-bottom:18px; font-size:1.02rem}
+    .authors{font-size:1.12rem; margin:6px 0 2px}
+    .authors a{color:var(--ink)}
+    .affil{color:var(--muted); font-size:1.0rem; margin:4px 0 2px}
+    .note{color:var(--muted); font-size:.92rem; margin-top:6px}
+
+    /* Link pills */
+    .links{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:26px 0 10px}
+    .pill{
+      display:inline-flex; align-items:center; gap:9px;
+      background:var(--pill); color:#fff; border-radius:999px;
+      padding:10px 20px; font-weight:600; font-size:.96rem; border:none;
+    }
+    .pill:hover{background:#000; text-decoration:none; color:#fff}
+    .pill.disabled{background:#9aa0a6; cursor:not-allowed}
+    .pill .ico{font-size:1.05rem; line-height:1}
+
+    /* Sections */
+    section{padding:30px 0}
+    h2.section{
+      text-align:center; font-size:1.7rem; font-weight:700; margin:8px 0 22px;
+    }
+    .lead{max-width:820px; margin:0 auto; text-align:justify}
+    .lead p{margin:0 0 14px}
+
+    /* Hero */
+    .hero{padding:14px 0 6px}
+    .hero figure{margin:0}
+    .media{
+      width:100%; border-radius:12px; overflow:hidden; border:1px solid var(--line);
+      background:#fafafa; display:block;
+    }
+    figcaption{color:var(--muted); font-size:.92rem; margin-top:12px; text-align:center; max-width:840px; margin-left:auto; margin-right:auto}
+
+    /* Figure blocks */
+    .fig{margin:34px auto; max-width:var(--max)}
+    .fig img{width:100%; height:auto; display:block; border-radius:10px; border:1px solid var(--line); background:#fff}
+    .fig h3{font-size:1.12rem; margin:0 0 12px; text-align:center; font-weight:700}
+
+    .divider{height:1px; background:var(--line); border:0; margin:8px 0}
+
+    /* Table */
+    .tablewrap{overflow-x:auto; margin:18px auto; max-width:var(--max)}
+    table{border-collapse:collapse; width:100%; font-size:.92rem}
+    caption{caption-side:top; color:var(--muted); font-size:.9rem; padding-bottom:10px; text-align:left}
+    th,td{border-bottom:1px solid var(--line); padding:8px 12px; text-align:center; white-space:nowrap}
+    thead th{border-bottom:2px solid #ccc}
+    td.first,th.first{text-align:left}
+    tr.ours td{font-weight:700; background:#f6f9ff}
+
+    /* BibTeX */
+    pre.bibtex{
+      background:#f6f6f7; border:1px solid var(--line); border-radius:10px;
+      padding:18px 20px; overflow-x:auto; font-size:.86rem; line-height:1.5;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:#222;
+    }
+
+    footer{padding:40px 0 56px; text-align:center; color:var(--muted); font-size:.86rem}
+    footer a{color:var(--muted); text-decoration:underline}
+
+    @media (max-width:640px){
+      body{font-size:16px}
+      h1.title{font-size:1.55rem}
+      h2.section{font-size:1.4rem}
+      .lead{text-align:left}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <h1 class="title">DiffGI: Differentiable Geometry Images for<br/>High-Fidelity Thin-Shell 3D Generation</h1>
+      <div class="venue">ECCV 2026</div>
+
+      <div class="authors">
+        <a href="#">Anonymous Author(s)</a>
+      </div>
+      <div class="affil">Anonymous Institution</div>
+      <div class="note">Author names and affiliations will be released upon de-anonymization.</div>
+
+      <nav class="links">
+        <a class="pill" href="static/pdfs/DiffGI_paper.pdf"><span class="ico">📄</span> Paper</a>
+        <a class="pill" href="static/pdfs/DiffGI_supplementary.pdf"><span class="ico">📎</span> Supplementary</a>
+        <a class="pill disabled" href="#" onclick="return false;"><span class="ico">📝</span> arXiv (soon)</a>
+        <a class="pill" href="#video"><span class="ico">▶</span> Video</a>
+        <a class="pill disabled" href="#" onclick="return false;"><span class="ico">💻</span> Code (coming soon)</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero video -->
+  <section class="hero" id="video">
+    <div class="wrap">
+      <figure>
+        <video class="media" autoplay loop muted playsinline poster="static/images/teaser_poster.jpg">
+          <source src="static/videos/teaser.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>
+          <b>DiffGI</b> represents thin-shell and non-manifold 3D surfaces as a continuous 2D TSDF geometry image,
+          and recovers meshes through a fully differentiable Marching Squares module — enabling end-to-end,
+          boundary-accurate 3D generation in an ultra-compact 32×32 latent space.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Abstract -->
+  <section id="abstract">
+    <div class="wrap">
+      <h2 class="section">Abstract</h2>
+      <div class="lead">
+        <p>
+          Existing 3D generative models predominantly rely on implicit volumetric representations, which
+          inherently enforce watertight topology and struggle to faithfully represent thin-shell and non-manifold
+          geometries such as garments. While geometry image-based approaches offer a surface-centric alternative,
+          existing methods typically rely on discrete binary occupancy maps, leaving surface reconstruction as a
+          non-differentiable post-processing step disconnected from the learning pipeline.
+        </p>
+        <p>
+          To address this, we propose <b>Differentiable Geometry Image (DiffGI)</b>, an end-to-end 3D-to-2D mapping
+          framework that seamlessly integrates surface representation and geometric optimization. DiffGI replaces
+          conventional binary maps with a continuous 2D <b>Truncated Signed Distance Function (TSDF)</b>, enabling
+          subpixel-accurate boundary modeling and effectively eliminating resolution-dependent staircase artifacts.
+          We further introduce a <b>differentiable Marching Squares</b> algorithm based on analytical linear
+          interpolation, allowing gradients from 3D surface losses to propagate seamlessly back to the 2D latent space.
+        </p>
+        <p>
+          Leveraging this differentiable pipeline, we train a <b>DiffGI-VAE</b> augmented with a geometry-aware normal
+          rendering loss to compress complex 3D surfaces into an ultra-compact 32×32 latent space. Finally, we
+          instantiate a transformer-based latent diffusion model on top of this space for conditional 3D generation.
+          Extensive experiments on garment and object datasets demonstrate that our method achieves superior
+          reconstruction fidelity and boundary precision compared to prior geometry-image and voxel-based approaches,
+          while requiring significantly fewer computational resources.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Method -->
+  <section id="method">
+    <div class="wrap">
+      <h2 class="section">Method Overview</h2>
+      <div class="fig">
+        <img src="static/images/method.png" alt="DiffGI framework overview" />
+        <figcaption>
+          The input 3D mesh is mapped to a 2D TSDF-based DiffGI representation, encoded by a DiffGI-VAE into a
+          compact latent. The decoder reconstructs the TSDF geometry image, from which a 3D mesh is recovered via
+          Differentiable Marching Squares (DMS). Pixel-space losses on the TSDF and position maps, together with a
+          geometry-aware normal rendering loss, are jointly applied for end-to-end optimization.
+        </figcaption>
+      </div>
+      <div class="lead">
+        <p><b>Continuous 2D Surface Representation.</b> A 2D TSDF-based geometry image replaces binary occupancy maps,
+          achieving subpixel-level boundary precision while mitigating resolution dependency and staircase artifacts.</p>
+        <p><b>Fully Differentiable Surface Reconstruction.</b> A tensor-based Differentiable Marching Squares algorithm
+          makes 3D surface extraction amenable to backpropagation, bridging 2D optimization and 3D mesh recovery at
+          O(N²) complexity.</p>
+        <p><b>High-Efficiency Non-Manifold 3D Generation.</b> Conditional latent diffusion on the DiffGI latent space
+          achieves both computational efficiency and geometric fidelity compared to volumetric / voxel-based models.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Reconstruction -->
+  <section id="reconstruction">
+    <div class="wrap">
+      <h2 class="section">Reconstruction Fidelity (DiffGI-VAE)</h2>
+      <div class="fig">
+        <img src="static/images/reconstruction.png" alt="VAE reconstruction comparison on ABO and GarmageSet" />
+        <figcaption>
+          Qualitative comparison of VAE reconstructions on the GarmageSet and ABO datasets. DiffGI-VAE yields sharper
+          boundaries and better preservation of thin-shell details than Omages and GarmageNet.
+        </figcaption>
+      </div>
+      <div class="fig">
+        <img src="static/images/reconstruction_heatmap.png" alt="Reconstruction error heatmaps" />
+        <figcaption>
+          Per-vertex reconstruction error (heatmaps). Our continuous TSDF representation preserves fine fabric
+          boundaries that binary-mask baselines break apart.
+        </figcaption>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <caption>Reconstruction & encoding fidelity on ABO and GarmageSet. Our method attains the best scores with the most compact representation.</caption>
+          <thead>
+            <tr>
+              <th class="first">Method</th><th>Rep. Size</th>
+              <th>ABO CD↓</th><th>ABO EMD↓</th><th>ABO JSD↓</th><th>ABO NC↑</th>
+              <th>Garmage CD↓</th><th>Garmage EMD↓</th><th>Garmage JSD↓</th><th>Garmage NC↑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="first">Omages</td><td>64×64×4</td><td>0.89</td><td>0.25</td><td>0.92</td><td>0.89</td><td>1.31</td><td>0.17</td><td>1.79</td><td>0.95</td></tr>
+            <tr><td class="first">GarmageNet</td><td>N×72</td><td>—</td><td>—</td><td>—</td><td>—</td><td>2.19</td><td>0.21</td><td>32.61</td><td>0.94</td></tr>
+            <tr class="ours"><td class="first">Ours</td><td>32×32×4</td><td>0.83</td><td>0.23</td><td>0.89</td><td>0.83</td><td>0.46</td><td>0.16</td><td>1.24</td><td>0.96</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Generation -->
+  <section id="generation">
+    <div class="wrap">
+      <h2 class="section">3D Generation</h2>
+
+      <div class="fig">
+        <h3>Label-Conditioned Generation (ABO)</h3>
+        <img src="static/images/label_generation.png" alt="Label-conditioned generation on ABO" />
+        <figcaption>
+          Our DiffGI-based diffusion model generates thin frames and open-boundary furniture structures with fewer
+          staircase artifacts than Omages.
+        </figcaption>
+      </div>
+
+      <div class="fig">
+        <h3>Image-Conditioned Generation (Single-View Image-to-3D)</h3>
+        <img src="static/images/image_conditioned.png" alt="Image-conditioned garment generation" />
+        <figcaption>
+          Single front-view image → complete 3D garment. Compared with TRELLIS, TRELLIS.2, and GarmageNet, DiffGI
+          reconstructs cleaner boundaries and compact thin-shell meshes (≈23K vertices on average).
+        </figcaption>
+      </div>
+
+      <div class="fig">
+        <img src="static/images/additional_results.png" alt="Additional image-to-3D results" />
+        <figcaption>Additional single-view image-to-3D results with the corresponding 2D DiffGI tensors.</figcaption>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <caption>Image-to-3D on GarmageSet. DiffGI achieves the best geometric accuracy with far fewer vertices.</caption>
+          <thead>
+            <tr><th class="first">Method</th><th>Avg. Vertices</th><th>CD↓</th><th>MD (F1)↑</th><th>d<sub>H</sub>↓</th><th>BCD↓</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="first">TRELLIS</td><td>109K</td><td>3.44</td><td>0.28</td><td>15.38</td><td>N/A</td></tr>
+            <tr><td class="first">TRELLIS.2</td><td>380K</td><td>11.01</td><td>0.27</td><td>69.70</td><td>12.44</td></tr>
+            <tr><td class="first">GarmageNet</td><td>526K</td><td>4.31</td><td>0.20</td><td>23.76</td><td>5.64</td></tr>
+            <tr class="ours"><td class="first">Ours (DiffGI)</td><td>23K</td><td>1.35</td><td>0.48</td><td>8.42</td><td>2.91</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="fig">
+        <h3>Latent Space Interpolation</h3>
+        <img src="static/images/interpolation.png" alt="Latent interpolation across categories" />
+        <figcaption>
+          Smooth interpolations in the DiffGI latent space across furniture categories, demonstrating a
+          well-structured and continuous latent manifold.
+        </figcaption>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Ablation -->
+  <section id="ablation">
+    <div class="wrap">
+      <h2 class="section">Ablation Studies</h2>
+
+      <div class="fig">
+        <h3>TSDF vs. Occupancy Representation</h3>
+        <img src="static/images/tsdf_vs_occupancy.png" alt="TSDF vs occupancy reconstruction" />
+        <figcaption>
+          Our TSDF-based DiffGI representation with normal rendering loss (left) versus an occupancy-based geometry
+          image without normal loss (right): noticeably sharper boundaries and better preservation of thin-shell
+          structures.
+        </figcaption>
+      </div>
+
+      <div class="fig">
+        <h3>Effect of the Geometry-Aware Normal Loss</h3>
+        <img src="static/images/ablation_normal.png" alt="Ablation of normal rendering loss" />
+        <figcaption>
+          Enabling the normal rendering loss substantially mitigates high-frequency noise and aliasing at mesh
+          boundaries and surfaces.
+        </figcaption>
+      </div>
+
+      <div class="fig">
+        <h3>Transfer Learning from Pretrained VAE</h3>
+        <img src="static/images/vae_training.png" alt="Training curve: pretrained vs from scratch" />
+        <figcaption>
+          Initializing from a pretrained Stable Diffusion VAE leads to faster, more stable convergence than training
+          from scratch.
+        </figcaption>
+      </div>
+
+      <div class="fig">
+        <h3>UV-Chart Data Augmentation</h3>
+        <img src="static/images/augmentation.png" alt="UV-chart-level augmentation" />
+        <figcaption>
+          Geometric data augmentation via random 90°-multiple rotations and re-packing at the UV chart level expands
+          the training distribution while preserving per-chart geometric signals.
+        </figcaption>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Efficiency -->
+  <section id="efficiency">
+    <div class="wrap">
+      <h2 class="section">Computational Efficiency</h2>
+      <div class="lead">
+        <p>
+          Because DiffGI operates in a compact 2D latent space, image-conditioned generation completes in
+          <b>~1.2&nbsp;s on a consumer GPU</b> (RTX 4070, 3.22&nbsp;GB VRAM) and <b>~8.5&nbsp;s on CPU only</b>
+          (MacBook M4) — scaling from servers down to edge devices. Volumetric models such as TRELLIS require up
+          to 16.28&nbsp;GB VRAM, and Omages takes 52&nbsp;s per sample.
+        </p>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <caption>Peak memory usage and inference latency across methods.</caption>
+          <thead>
+            <tr><th class="first">Method</th><th>Hardware</th><th>Peak VRAM (GB)↓</th><th>Time (s)↓</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="first">TRELLIS-image</td><td>RTX A6000 Ada</td><td>16.28</td><td>4.52</td></tr>
+            <tr><td class="first">Omages</td><td>RTX A6000 Ada</td><td>2.49</td><td>52.0</td></tr>
+            <tr class="ours"><td class="first">Ours-Image</td><td>RTX A6000 Ada</td><td>3.22</td><td>0.80</td></tr>
+            <tr class="ours"><td class="first">Ours-Image</td><td>RTX 4070 (12GB)</td><td>3.22</td><td>1.21</td></tr>
+            <tr class="ours"><td class="first">Ours-Image</td><td>MacBook M4 (CPU)</td><td>—</td><td>8.52</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- BibTeX -->
+  <section id="bibtex">
+    <div class="wrap">
+      <h2 class="section">BibTeX</h2>
+      <pre class="bibtex">@inproceedings{diffgi2026,
+  title     = {DiffGI: Differentiable Geometry Images for High-Fidelity Thin-Shell 3D Generation},
+  author    = {Anonymous},
+  booktitle = {Proceedings of the European Conference on Computer Vision (ECCV)},
+  year      = {2026}
+}</pre>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p>
+        This project page is for academic purposes. Website template inspired by
+        <a href="https://nerfies.github.io/">Nerfies</a>.<br/>
+        © 2026 DiffGI Authors.
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

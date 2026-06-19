@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────────────────────
+#  DiffGI project page — .gitignore
+#  Only the self-contained `site/` folder is meant to be published.
+# ─────────────────────────────────────────────────────────────
+
+# Source / working materials (NOT needed for the published page).
+# Contains personal CVs and third-party figures — must stay private.
+paper/
+
+# Hard block: never commit personal résumé / CV files, wherever they live.
+*cv*.pdf
+*CV*.pdf
+*[Rr]esume*.pdf
+*[Rr]ésumé*.pdf
+
+# Backup of the original (pre-edit) teaser — not used by the live site.
+site/static/videos/teaser_original.mp4
+
+# ── OS / editor cruft ──────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+*.swp
+.idea/
+.vscode/
+
+# ── misc ───────────────────────────────────────────────────────
+*.log
+node_modules/
+__pycache__/
