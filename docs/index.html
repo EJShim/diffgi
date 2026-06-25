@@ -28,7 +28,7 @@
     .wrap{max-width:var(--max); margin:0 auto; padding:0 22px}
 
     /* Header */
-    header{padding:56px 0 8px; text-align:center}
+    header{padding:56px 0 8px; text-align:center; position:relative}
     h1.title{
       font-size:2.05rem; line-height:1.25; font-weight:700; letter-spacing:-.01em;
       margin:0 auto 22px; max-width:840px;
@@ -37,6 +37,9 @@
     .authors{font-size:1.12rem; margin:6px 0 2px}
     .authors a{color:var(--ink)}
     .affil{color:var(--muted); font-size:1.0rem; margin:4px 0 2px}
+    /* Brand logo (top-left corner) */
+    .brand{position:absolute; top:18px; left:22px; z-index:5; display:inline-block; line-height:0}
+    .brand img{height:26px; width:auto; display:block}
 
     /* Link pills */
     .links{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:26px 0 10px}
@@ -130,6 +133,9 @@
 <body>
 
   <header>
+    <a class="brand" href="https://www.clo3d.com" target="_blank" rel="noopener" aria-label="CLO Virtual Fashion">
+      <img src="static/images/clo_logo.png" alt="CLO Virtual Fashion" onerror="this.style.display='none'" />
+    </a>
     <div class="wrap">
       <h1 class="title">DiffGI: Differentiable Geometry Images for<br/>High-Fidelity Thin-Shell 3D Generation</h1>
       <div class="venue">ECCV 2026</div>
@@ -224,14 +230,15 @@
       <h2 class="section">The Effect of Our Representation</h2>
       <div class="fig">
         <div class="cmp-labels">
-          <div class="yes">With our method</div>
-          <div class="no">Without our method</div>
+          <div class="yes">DiffGI (ours)</div>
+          <div class="no">Conventional GI</div>
         </div>
-        <img src="static/images/tsdf_vs_occupancy.png" alt="Same garment reconstructed with and without DiffGI" />
+        <img src="static/images/tsdf_vs_occupancy.png" alt="DiffGI versus a conventional occupancy-based geometry image" />
         <figcaption>
-          The same garment, reconstructed with and without DiffGI. Our continuous TSDF and normal rendering loss
-          keep thin shells and boundaries sharp and intact (left); a plain binary occupancy map leaves the same
-          regions torn and aliased (right).
+          The same garment recovered from our <b>DiffGI</b> — a continuous, differentiable TSDF geometry image
+          (left) — versus a <b>conventional geometry image</b> built on a binary occupancy map (right). DiffGI
+          keeps thin shells and boundaries sharp and intact, while the occupancy-based representation leaves them
+          torn and aliased.
         </figcaption>
       </div>
     </div>
@@ -330,6 +337,22 @@
             <tr class="ours"><td class="first">Ours-Image</td><td>MacBook M4 (CPU)</td><td>—</td><td>8.52</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Acknowledgements -->
+  <section id="acknowledgements">
+    <div class="wrap">
+      <h2 class="section">Acknowledgements</h2>
+      <div class="lead">
+        <p>
+          We thank Hyun Kang, Seungoh Han, Sihun Cha, and Dong-sig Kang for valuable discussions and feedback
+          throughout this work. We are also grateful to <b>CLO Virtual Fashion</b> for providing the research
+          environment and resources that made this work possible.
+        </p>
       </div>
     </div>
   </section>
