@@ -34,7 +34,8 @@ python -m http.server 8000
 `.nojekyll` is included so GitHub serves the files as-is (no Jekyll processing).
 
 ## TODO before going public
-- [ ] Replace **Anonymous Author(s) / Anonymous Institution** with real names, affiliations, links.
+- [x] Replace anonymous authors with real names / affiliation / links.
+- [x] Update the **BibTeX** entry with the author list.
 - [ ] Fill in the **arXiv** link (currently disabled).
+- [ ] Add the full **Video** (currently disabled); the hero `teaser.mp4` is in place.
 - [ ] Wire up the in-browser inference in `demo/index.html` (see the INTEGRATION POINT) and host weights on Hugging Face.
-- [ ] Update the **BibTeX** entry with final author list / proceedings info.
