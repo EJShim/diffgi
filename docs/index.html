@@ -217,26 +217,20 @@
 
   <hr class="divider" />
 
-  <!-- With vs. without our method -->
+  <!-- Effect of our representation -->
   <section id="ablation">
     <div class="wrap">
-      <h2 class="section">With vs. Without Our Method</h2>
-      <p class="sub">
-        The same garment reconstructed with and without DiffGI. Our continuous TSDF representation and
-        normal rendering loss keep thin shells and boundaries intact; a binary occupancy geometry image tears
-        them apart.
-      </p>
+      <h2 class="section">The Effect of Our Representation</h2>
       <div class="fig">
         <div class="cmp-labels">
           <div class="yes">With our method</div>
           <div class="no">Without our method</div>
         </div>
-        <img src="static/images/tsdf_vs_occupancy.png" alt="Reconstruction with vs. without DiffGI" />
+        <img src="static/images/tsdf_vs_occupancy.png" alt="Same garment reconstructed with and without DiffGI" />
         <figcaption>
-          <b>Left (with our method):</b> continuous TSDF + differentiable reconstruction yields clean, sharp
-          boundaries and intact thin-shell structures.
-          <b>Right (without):</b> a binary occupancy geometry image produces torn edges, staircase artifacts, and
-          broken thin regions.
+          The same garment, reconstructed with and without DiffGI. Our continuous TSDF and normal rendering loss
+          keep thin shells and boundaries sharp and intact (left); a plain binary occupancy map leaves the same
+          regions torn and aliased (right).
         </figcaption>
       </div>
     </div>
