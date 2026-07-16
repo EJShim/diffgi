@@ -14,8 +14,7 @@ docs/
 │   └── index.html
 └── static/
     ├── images/             # figures (PNG) + teaser poster
-    ├── videos/teaser.mp4   # hero video
-    └── pdfs/               # paper + supplementary
+    └── videos/teaser.mp4   # hero video
 ```
 
 ## Local preview
@@ -36,6 +35,6 @@ python -m http.server 8000
 ## TODO before going public
 - [x] Replace anonymous authors with real names / affiliation / links.
 - [x] Update the **BibTeX** entry with the author list.
-- [ ] Fill in the **arXiv** link (currently disabled).
+- [x] Fill in the **arXiv** link.
 - [ ] Add the full **Video** (currently disabled); the hero `teaser.mp4` is in place.
 - [ ] Wire up the in-browser inference in `demo/index.html` (see the INTEGRATION POINT) and host weights on Hugging Face.
