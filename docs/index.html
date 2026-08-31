@@ -174,7 +174,7 @@
       <nav class="links">
         <a class="pill" href="https://arxiv.org/abs/2607.13365" target="_blank" rel="noopener"><span class="ico">📄</span> Paper</a>
         <a class="pill disabled" href="#" onclick="return false;"><span class="ico">💻</span> Code (soon)</a>
-        <a class="pill disabled" href="#" onclick="return false;"><span class="ico">▶</span> Video (soon)</a>
+        <a class="pill" href="https://www.youtube.com/watch?v=2BR08WiXVtk" target="_blank" rel="noopener"><span class="ico">▶</span> Video</a>
       </nav>
     </div>
   </header>
@@ -282,10 +282,23 @@
 
       <div class="fig">
         <h3>Single-View Image-to-3D</h3>
-        <img src="static/images/image_conditioned.png" alt="Image-conditioned garment generation" />
+        <video class="media" autoplay loop muted playsinline>
+          <source src="static/videos/inference.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
         <figcaption>
-          From a single front-view image to a complete 3D garment. Against TRELLIS, TRELLIS.2, and GarmageNet,
-          DiffGI recovers cleaner boundaries with far more compact meshes (≈23K vertices on average).
+          Image-conditioned generation on GarmageSet: input image, DiffGI generation, and ground truth.
+        </figcaption>
+      </div>
+
+      <div class="fig">
+        <h3>Zero-Shot Generation from In-the-Wild Images</h3>
+        <video class="media" autoplay loop muted playsinline>
+          <source src="static/videos/inference_zeroshot.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>
+          Zero-shot results on real product photos. Each row shows five random seeds with the generated DiffGI tensors.
         </figcaption>
       </div>
 
@@ -349,6 +362,17 @@
         <img src="static/images/interpolation.png" alt="Latent interpolation across categories" />
         <figcaption>
           Smooth interpolations across furniture categories reveal a well-structured, continuous DiffGI latent manifold.
+        </figcaption>
+      </div>
+
+      <div class="fig">
+        <h3>Inference Speed</h3>
+        <video class="media" autoplay loop muted playsinline>
+          <source src="static/videos/webdemo.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <figcaption>
+          Interactive web demo: the full pipeline generates a simulation-ready garment in real time.
         </figcaption>
       </div>
 

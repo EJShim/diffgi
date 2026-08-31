@@ -16,6 +16,10 @@ paper/
 # Backup of the original (pre-edit) teaser — not used by the live site.
 docs/static/videos/teaser_original.mp4
 
+# Original web-demo screen recording (28MB, 120fps) — the site uses the
+# transcoded webdemo.mp4 instead.
+docs/static/videos/webdemo.mov
+
 # Demo model weights — host on Hugging Face / CDN, never in the repo
 # (GitHub Pages: 100MB/file, ~1GB repo, fair-use bandwidth).
 # Curated preset input images under docs/demo/presets/ are fine to commit.
